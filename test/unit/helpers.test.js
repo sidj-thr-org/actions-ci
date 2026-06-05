@@ -6,7 +6,8 @@ const {
   sanitizeError,
   validateRequiredEnv,
   validatePrNumber,
-  validateRepo
+  validateRepo,
+  validateTeamSlug
 } = require('../../lib/helpers')
 
 // ---------------------------------------------------------------------------
@@ -178,4 +179,37 @@ test('validateRepo — throws for invalid characters', async t => {
 
 test('validateRepo — throws for double slash', async t => {
   await t.exception.all(async () => validateRepo('owner//repo'))
+})
+
+// ---------------------------------------------------------------------------
+// validateTeamSlug
+// ---------------------------------------------------------------------------
+
+test('validateTeamSlug — returns slug for valid input', t => {
+  t.is(validateTeamSlug('my-team', '--maintainers-team'), 'my-team')
+  t.is(validateTeamSlug('Team1', '--team-leads-team'), 'Team1')
+})
+
+test('validateTeamSlug — accepts letters, digits, and hyphens', t => {
+  t.is(validateTeamSlug('team-leads-2024', '--team-leads-team'), 'team-leads-2024')
+})
+
+test('validateTeamSlug — throws for undefined', async t => {
+  await t.exception.all(async () => validateTeamSlug(undefined, '--maintainers-team'))
+})
+
+test('validateTeamSlug — throws for empty string', async t => {
+  await t.exception.all(async () => validateTeamSlug('', '--maintainers-team'))
+})
+
+test('validateTeamSlug — throws for slug with spaces', async t => {
+  await t.exception.all(async () => validateTeamSlug('my team', '--maintainers-team'))
+})
+
+test('validateTeamSlug — throws for slug with slash', async t => {
+  await t.exception.all(async () => validateTeamSlug('org/team', '--maintainers-team'))
+})
+
+test('validateTeamSlug — throws for slug with special characters', async t => {
+  await t.exception.all(async () => validateTeamSlug('<script>', '--maintainers-team'))
 })

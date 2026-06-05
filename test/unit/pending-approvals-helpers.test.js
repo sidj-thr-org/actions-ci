@@ -125,6 +125,19 @@ test('buildApprovalComment — includes ## Review Status marker', t => {
 // buildApprovalCounts — with mocked octokit
 // ---------------------------------------------------------------------------
 
+function makeMockOctokit (listMembersInOrg) {
+  const rest = {
+    teams: { listMembersInOrg }
+  }
+  return {
+    rest,
+    paginate: async (fn, params) => {
+      const { data } = await fn(params)
+      return data
+    }
+  }
+}
+
 test('buildApprovalCounts — counts approvers by team membership', async t => {
   const reviews = [
     { user: { login: 'alice' }, state: 'APPROVED', submitted_at: '2024-01-01T00:00:00Z' },
@@ -132,17 +145,11 @@ test('buildApprovalCounts — counts approvers by team membership', async t => {
     { user: { login: 'carol' }, state: 'APPROVED', submitted_at: '2024-01-01T00:00:00Z' }
   ]
 
-  const mockOctokit = {
-    rest: {
-      teams: {
-        listMembersInOrg: async ({ team_slug: slug }) => {
-          if (slug === 'maintainers') return { data: [{ login: 'alice' }] }
-          if (slug === 'team-leads') return { data: [{ login: 'bob' }] }
-          return { data: [] }
-        }
-      }
-    }
-  }
+  const mockOctokit = makeMockOctokit(async ({ team_slug: slug }) => {
+    if (slug === 'maintainers') return { data: [{ login: 'alice' }] }
+    if (slug === 'team-leads') return { data: [{ login: 'bob' }] }
+    return { data: [] }
+  })
 
   const teams = { maintainer: 'maintainers', teamLead: 'team-leads' }
   const counts = await buildApprovalCounts(mockOctokit, 'myorg', 'myrepo', reviews, teams)
@@ -158,13 +165,7 @@ test('buildApprovalCounts — ignores CHANGES_REQUESTED in final count', async t
     { user: { login: 'alice' }, state: 'CHANGES_REQUESTED', submitted_at: '2024-01-01T00:00:00Z' }
   ]
 
-  const mockOctokit = {
-    rest: {
-      teams: {
-        listMembersInOrg: async () => ({ data: [] })
-      }
-    }
-  }
+  const mockOctokit = makeMockOctokit(async () => ({ data: [] }))
 
   const counts = await buildApprovalCounts(mockOctokit, 'org', 'repo', reviews, { maintainer: 'a', teamLead: 'b' })
   // alice's most recent review is APPROVED
@@ -176,13 +177,7 @@ test('buildApprovalCounts — returns zeros when no approvals', async t => {
     { user: { login: 'alice' }, state: 'COMMENTED', submitted_at: '2024-01-01T00:00:00Z' }
   ]
 
-  const mockOctokit = {
-    rest: {
-      teams: {
-        listMembersInOrg: async () => ({ data: [] })
-      }
-    }
-  }
+  const mockOctokit = makeMockOctokit(async () => ({ data: [] }))
 
   const counts = await buildApprovalCounts(mockOctokit, 'org', 'repo', reviews, { maintainer: 'a', teamLead: 'b' })
   t.is(counts.maintainer, 0)
@@ -204,6 +199,10 @@ test('fetchReviews — calls listReviews with correct params', async t => {
           return { data: [] }
         }
       }
+    },
+    paginate: async (fn, params) => {
+      const { data } = await fn(params)
+      return data
     }
   }
 
@@ -217,17 +216,26 @@ test('fetchReviews — calls listReviews with correct params', async t => {
 // upsertPrComment — with mocked octokit
 // ---------------------------------------------------------------------------
 
-test('upsertPrComment — creates new comment when none exists', async t => {
-  let created = null
-  const mockOctokit = {
-    rest: {
-      issues: {
-        listComments: async () => ({ data: [] }),
-        createComment: async (params) => { created = params; return { data: {} } },
-        updateComment: async () => t.fail('should not update')
-      }
+function makeCommentOctokit (listComments, createComment, updateComment) {
+  const rest = {
+    issues: { listComments, createComment, updateComment }
+  }
+  return {
+    rest,
+    paginate: async (fn, params) => {
+      const { data } = await fn(params)
+      return data
     }
   }
+}
+
+test('upsertPrComment — creates new comment when none exists', async t => {
+  let created = null
+  const mockOctokit = makeCommentOctokit(
+    async () => ({ data: [] }),
+    async (params) => { created = params; return { data: {} } },
+    async () => t.fail('should not update')
+  )
 
   await upsertPrComment(mockOctokit, 'owner', 'repo', 1, '## Review Status\nall good')
   t.ok(created)
@@ -237,17 +245,11 @@ test('upsertPrComment — creates new comment when none exists', async t => {
 
 test('upsertPrComment — updates existing comment when marker found', async t => {
   let updated = null
-  const mockOctokit = {
-    rest: {
-      issues: {
-        listComments: async () => ({
-          data: [{ id: 999, body: '## Review Status\nold content' }]
-        }),
-        updateComment: async (params) => { updated = params; return { data: {} } },
-        createComment: async () => t.fail('should not create')
-      }
-    }
-  }
+  const mockOctokit = makeCommentOctokit(
+    async () => ({ data: [{ id: 999, body: '## Review Status\nold content' }] }),
+    async () => t.fail('should not create'),
+    async (params) => { updated = params; return { data: {} } }
+  )
 
   await upsertPrComment(mockOctokit, 'owner', 'repo', 1, '## Review Status\nnew content')
   t.ok(updated)
