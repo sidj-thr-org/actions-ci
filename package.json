@@ -1,6 +1,6 @@
 {
   "name": "@sidj-thr/actions-ci",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CI utilities — a modular, extensible CLI for GitHub automation",
   "author": "sidj-thr",
   "license": "Apache-2.0",
@@ -29,8 +29,7 @@
     "lint:fix": "standard --fix",
     "test:unit": "brittle-node test/unit/*.test.js test/unit/**/*.test.js",
     "test": "npm run test:unit",
-    "audit": "npm audit --audit-level=high",
-    "prepublishOnly": "npm test"
+    "audit": "npm audit --audit-level=high"
   },
   "publishConfig": {
     "access": "public"
