@@ -3,7 +3,7 @@
 
 const { command, flag, summary, header } = require('paparam')
 const { version } = require('./package.json')
-const pendingApprovals = require('./lib/commands/pending-approvals/index')
+const { pendingApprovals } = require('./lib/commands')
 
 // Subcommands are passed as direct positional arguments to command().
 // There is no subs() wrapper — this matches the paparam pattern.
