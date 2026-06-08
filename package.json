@@ -27,7 +27,7 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test:unit": "brittle-node test/unit/*.test.js",
+    "test:unit": "brittle-node test/unit/*.test.js test/unit/**/*.test.js",
     "test": "npm run test:unit",
     "audit": "npm audit --audit-level=high",
     "prepublishOnly": "npm test"

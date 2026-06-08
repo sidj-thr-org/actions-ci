@@ -20,7 +20,6 @@ const prog = command(
   summary('CI utilities for GitHub automation'),
   flag('--version|-v', 'Print version and exit'),
   pendingApprovals.toCommand()
-  // future commands go here as additional positional args
 )
 
 prog.parse()

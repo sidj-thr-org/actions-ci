@@ -10,7 +10,7 @@ const {
   fetchReviews,
   upsertPrComment,
   MIN_CODEOWNER_APPROVALS
-} = require('../../lib/commands/pending-approvals/helpers')
+} = require('../../../lib/commands/pending-approvals/helpers')
 
 // ---------------------------------------------------------------------------
 // getLatestApprovals
