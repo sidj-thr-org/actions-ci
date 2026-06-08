@@ -1,23 +1,23 @@
-# @qvac/ci
+# @sidj-thr/actions-ci
 
-CI utilities for the QVAC monorepo — a modular, extensible CLI that replaces inline YAML scripts with tested, versioned Node.js commands.
+CI utilities — a modular, extensible CLI for GitHub automation. Replaces inline YAML scripts with tested, versioned Node.js commands.
 
 ## Installation
 
 ```sh
-npm install @qvac/ci
+npm install @sidj-thr/actions-ci
 ```
 
 Or run directly in a GitHub Actions step:
 
 ```yaml
-- run: npx @qvac/ci pending-approvals --pr-number ${{ github.event.pull_request.number }}
+- run: npx @sidj-thr/actions-ci pending-approvals --pr-number ${{ github.event.pull_request.number }}
 ```
 
 ## Usage
 
 ```
-qvac-ci <command> [flags]
+actions-ci <command> [flags]
 
 Commands:
   pending-approvals   Check PR approval status and post a review-status comment
@@ -34,7 +34,7 @@ Flags:
 Checks whether a PR has the required approvals from the right roles (Management/Team Lead and Members), then upserts a `## Review Status` comment on the PR summarising the current state.
 
 ```
-qvac-ci pending-approvals \
+actions-ci pending-approvals \
   --pr-number 123 \
   --maintainers-team management \
   --team-leads-team team-leads \
@@ -66,11 +66,11 @@ Exits with code `1` if the PR is not yet approved.
 ```yaml
 - name: Check PR approvals
   env:
-    GITHUB_TOKEN: ${{ secrets.QVAC_CI_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
     GITHUB_APP_ID: ${{ secrets.APP_ID }}
     GITHUB_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
   run: |
-    npx @qvac/ci pending-approvals \
+    npx @sidj-thr/actions-ci pending-approvals \
       --pr-number ${{ github.event.pull_request.number }} \
       --maintainers-team management \
       --team-leads-team team-leads \
@@ -87,7 +87,7 @@ Exits with code `1` if the PR is not yet approved.
 | Token in error messages | `sanitizeError()` + `redact()` on all output |
 | CodeQL taint flow argv→API | `validatePrNumber()` + `validateRepo()` applied before every call |
 | Prototype pollution via argv | `paparam` used (no `minimist`); `paparam` does not expose raw prototype-writable objects |
-| Dependency CVEs | Only `paparam` as runtime dep; run `npm audit` before releasing |
+| Dependency CVEs | Minimal runtime deps; run `npm audit` before releasing |
 | Secrets in test files | All network calls mocked; fixture tokens are fake sentinel values |
 | Stack trace leaking secrets | `err.message` only, never `err.stack` |
 
@@ -145,7 +145,7 @@ Exits with code `1` if the PR is not yet approved.
    const myCommand = require('./lib/commands/my-command/index')
    // ...
    const prog = command(
-     'qvac-ci',
+     'actions-ci',
      // ...
      pendingApprovals.toCommand(),
      myCommand.toCommand()   // ← add this
@@ -175,10 +175,19 @@ npm run lint:fix
 npm run audit
 ```
 
+## Publishing
+
+This package has no build step — it is plain Node.js CJS. Running `npm publish` will automatically execute `npm test` first (via the `prepublishOnly` hook) to ensure tests pass before the package is pushed to the registry.
+
+```sh
+# Publish to npm (runs tests automatically first)
+npm publish
+```
+
 ## Requirements
 
 Node.js `>=18.0.0`
 
 ## License
 
-Apache-2.0 © Tether Data, S.A. de C.V.
+Apache-2.0

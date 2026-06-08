@@ -1,17 +1,17 @@
 {
-  "name": "@qvac/ci",
+  "name": "@sidj-thr/actions-ci",
   "version": "0.1.0",
-  "description": "CI utilities for the QVAC monorepo",
-  "author": "Tether",
+  "description": "CI utilities — a modular, extensible CLI for GitHub automation",
+  "author": "sidj-thr",
   "license": "Apache-2.0",
   "main": "./main.js",
   "bin": {
-    "qvac-ci": "./main.js"
+    "actions-ci": "./main.js"
   },
   "keywords": [
-    "tether",
     "ci",
-    "qvac"
+    "github-actions",
+    "cli"
   ],
   "files": [
     "main.js",
@@ -29,18 +29,18 @@
     "lint:fix": "standard --fix",
     "test:unit": "brittle-node test/unit/*.test.js",
     "test": "npm run test:unit",
-    "audit": "npm audit --audit-level=high"
+    "audit": "npm audit --audit-level=high",
+    "prepublishOnly": "npm test"
   },
   "publishConfig": {
     "access": "public"
   },
-  "bugs": "https://github.com/tetherto/qvac/issues",
+  "bugs": "https://github.com/sidj-thr/actions-ci/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tetherto/qvac.git",
-    "directory": "packages/qvac-ci"
+    "url": "git+https://github.com/sidj-thr/actions-ci.git"
   },
-  "homepage": "https://github.com/tetherto/qvac/tree/main/packages/qvac-ci#readme",
+  "homepage": "https://github.com/sidj-thr/actions-ci#readme",
   "dependencies": {
     "@actions/github": "^9.0.0",
     "@octokit/auth-app": "^8.2.0",
