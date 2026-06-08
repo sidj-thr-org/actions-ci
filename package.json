@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "main": "./main.js",
   "bin": {
-    "actions-ci": "./main.js"
+    "actions-ci": "main.js"
   },
   "keywords": [
     "ci",
