@@ -51,6 +51,37 @@ actions-ci pending-approvals \
 
 Exits with code `1` if the PR is not yet approved.
 
+#### Comment format
+
+The command upserts a single `## Review Status` comment on the PR. Examples of what it posts:
+
+**Approved:**
+```
+## Review Status
+**Current Status: ✅ APPROVED**
+Approvals so far: Management: 1, Team Lead: 1
+```
+
+**Pending — missing codeowner approval:**
+```
+## Review Status
+**Current Status: ❌ PENDING**
+Approvals so far: Member: 1
+
+Pending reviews: Needs 1 Management or Team Lead.
+```
+
+**Pending — codeowner present but total below threshold:**
+```
+## Review Status
+**Current Status: ❌ PENDING**
+Approvals so far: Management: 1
+
+Pending reviews: Needs 1 more from Management, Team Lead, or Member.
+```
+
+Zero-count roles are omitted from the summary line. If the comment already exists (identified by the `## Review Status` marker) it is updated in-place rather than creating a new one.
+
 ### Environment variables (required)
 
 | Variable | Description |
@@ -177,12 +208,16 @@ npm run audit
 
 ## Publishing
 
-This package has no build step — it is plain Node.js CJS. Running `npm publish` will automatically execute `npm test` first (via the `prepublishOnly` hook) to ensure tests pass before the package is pushed to the registry.
+This package has no build step — it is plain Node.js CJS with no compilation or bundling required.
+
+`npm publish` automatically runs `npm test` first via the `prepublishOnly` hook, so a failing test suite will abort the publish before anything reaches the registry.
 
 ```sh
-# Publish to npm (runs tests automatically first)
+# Publish to npm (runs tests automatically first via prepublishOnly)
 npm publish
 ```
+
+In CI, tests should also run in a dedicated job before the publish job, so failures are caught at PR time rather than at publish time.
 
 ## Requirements
 
