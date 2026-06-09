@@ -1,6 +1,6 @@
 {
   "name": "@sidj-thr/actions-ci",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "CI utilities — a modular, extensible CLI for GitHub automation",
   "author": "sidj-thr",
   "license": "Apache-2.0",
@@ -41,8 +41,8 @@
   },
   "homepage": "https://github.com/sidj-thr/actions-ci#readme",
   "dependencies": {
-    "@actions/github": "^9.0.0",
     "@octokit/auth-app": "^8.2.0",
+    "@octokit/rest": "^18.12.0",
     "paparam": "^1.10.1"
   },
   "devDependencies": {
