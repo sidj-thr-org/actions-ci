@@ -1,6 +1,6 @@
 {
   "name": "@sidj-thr/actions-ci",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "CI utilities — a modular, extensible CLI for GitHub automation",
   "author": "sidj-thr",
   "license": "Apache-2.0",
