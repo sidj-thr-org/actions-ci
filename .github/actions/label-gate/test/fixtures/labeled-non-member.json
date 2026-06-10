@@ -1,0 +1,27 @@
+{
+  "action": "labeled",
+  "number": 4243,
+  "pull_request": {
+    "number": 4243,
+    "head": {
+      "repo": { "full_name": "external-fork/actions-ci" },
+      "ref": "external-feature",
+      "sha": "cafef00d"
+    },
+    "base": {
+      "repo": { "full_name": "sidj-thr-org/actions-ci" }
+    },
+    "labels": [
+      { "name": "verified" }
+    ]
+  },
+  "label": {
+    "name": "verified"
+  },
+  "sender": {
+    "login": "mallory-outsider"
+  },
+  "repository": {
+    "full_name": "sidj-thr-org/actions-ci"
+  }
+}

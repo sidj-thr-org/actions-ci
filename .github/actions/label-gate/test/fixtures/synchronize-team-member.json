@@ -1,0 +1,24 @@
+{
+  "action": "synchronize",
+  "number": 4244,
+  "pull_request": {
+    "number": 4244,
+    "head": {
+      "repo": { "full_name": "sidj-thr-org/actions-ci" },
+      "ref": "feature-y",
+      "sha": "1234567"
+    },
+    "base": {
+      "repo": { "full_name": "sidj-thr-org/actions-ci" }
+    },
+    "labels": [
+      { "name": "verified" }
+    ]
+  },
+  "sender": {
+    "login": "alice-team-member"
+  },
+  "repository": {
+    "full_name": "sidj-thr-org/actions-ci"
+  }
+}
