@@ -8,7 +8,7 @@ on:
       - feature-*
       - tmp-*
     paths:
-      - "./**"
+      - "**"
       - "!.github/**"
   workflow_dispatch:
 
