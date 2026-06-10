@@ -34,12 +34,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "bugs": "https://github.com/sidj-thr/actions-ci/issues",
+  "bugs": "https://github.com/sidj-thr-org/actions-ci/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sidj-thr/actions-ci.git"
+    "url": "git+https://github.com/sidj-thr-org/actions-ci.git"
   },
-  "homepage": "https://github.com/sidj-thr/actions-ci#readme",
+  "homepage": "https://github.com/sidj-thr-org/actions-ci#readme",
   "dependencies": {
     "@octokit/auth-app": "^8.2.0",
     "@octokit/rest": "^22.0.1",
