@@ -40,5 +40,5 @@ outputs:
     description: "'true' when the workflow run is authorised to access secrets"
 
 runs:
-  using: "node20"
+  using: "node24"
   main: "src/index.mjs"
