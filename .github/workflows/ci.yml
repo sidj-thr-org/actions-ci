@@ -9,7 +9,6 @@ on:
       - tmp-*
     paths:
       - "**"
-      - "!.github/**"
   workflow_dispatch:
 
 env:
@@ -38,7 +37,7 @@ jobs:
         id: gate
         uses: ./.github/actions/label-gate
         with:
-          github-token: ${{ secrets.PAT_TOKEN }}
+          github-token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
           teams: qvac-mgmt
           users: sidj-thr
 
