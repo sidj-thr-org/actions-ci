@@ -9,6 +9,7 @@ on:
       - tmp-*
     paths:
       - "./**"
+      - "!.github/**"
   workflow_dispatch:
 
 env:
