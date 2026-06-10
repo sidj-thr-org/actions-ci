@@ -137,7 +137,7 @@ jobs:
       - label-gate
     if: needs.label-gate.outputs.authorised == 'true' && (needs.publish-logic.outputs.publish_main == 'true')
     runs-on: ubuntu-latest
-    environment: release
+    environment: npm
     permissions:
       contents: read
       packages: write
@@ -192,7 +192,7 @@ jobs:
       - label-gate
     if: needs.label-gate.outputs.authorised == 'true' && (needs.publish-logic.outputs.publish_feature == 'true')
     runs-on: ubuntu-latest
-    environment: release
+    environment: npm
     permissions:
       contents: read
       packages: write
@@ -216,7 +216,7 @@ jobs:
       - label-gate
     if: needs.label-gate.outputs.authorised == 'true' && (needs.publish-logic.outputs.publish_tmp == 'true')
     runs-on: ubuntu-latest
-    environment: release
+    environment: npm
     permissions:
       contents: read
       packages: write
